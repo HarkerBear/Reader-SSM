@@ -38,6 +38,9 @@
           <element id="library" level="project" name="Maven: org.springframework:spring-jdbc:5.3.13" />
           <element id="library" level="project" name="Maven: org.springframework:spring-test:5.3.13" />
           <element id="library" level="project" name="Maven: org.springframework:spring-tx:5.3.13" />
+          <element id="library" level="project" name="Maven: com.github.penggle:kaptcha:2.3.2" />
+          <element id="library" level="project" name="Maven: com.jhlabs:filters:2.0.235-1" />
+          <element id="library" level="project" name="Maven: commons-codec:commons-codec:1.15" />
         </element>
       </element>
     </root>
