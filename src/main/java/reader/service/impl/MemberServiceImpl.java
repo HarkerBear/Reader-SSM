@@ -2,9 +2,12 @@ package reader.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import reader.entity.Member;
+import reader.entity.MemberReadState;
 import reader.mapper.MemberMapper;
+import reader.mapper.MemberReadStateMapper;
 import reader.service.MemberService;
 import reader.service.exception.BusinessException;
 import reader.utils.MD5Utils;
@@ -19,6 +22,9 @@ import java.util.Random;
 public class MemberServiceImpl implements MemberService {
     @Resource
     private MemberMapper memberMapper;
+    @Resource
+    private MemberReadStateMapper memberReadStateMapper;
+
     public Member createMember(String username, String password, String nickname) {
         QueryWrapper<Member> queryWrapper = new QueryWrapper<Member>();
         queryWrapper.eq("username",username);
@@ -51,4 +57,34 @@ public class MemberServiceImpl implements MemberService {
         }
         return member;
     }
+
+    @Transactional(propagation = Propagation.NOT_SUPPORTED,readOnly = true)
+    public MemberReadState selectMemberReadState(Long memberId, Long bookId) {
+        QueryWrapper<MemberReadState> queryWrapper = new QueryWrapper();
+        queryWrapper.eq("book_id",bookId);
+        queryWrapper.eq("member_id",memberId);
+        MemberReadState memberReadState=memberReadStateMapper.selectOne(queryWrapper);
+        return memberReadState;
+    }
+
+    public MemberReadState updateMemberReadState(Long memberId, Long bookId, Integer readState) {
+        QueryWrapper<MemberReadState> queryWrapper = new QueryWrapper<MemberReadState>();
+        queryWrapper.eq("book_id",bookId);
+        queryWrapper.eq("member_id",memberId);
+        MemberReadState memberReadState=memberReadStateMapper.selectOne(queryWrapper);
+        if(memberReadState==null){
+            memberReadState = new MemberReadState();
+            memberReadState.setMemberId(memberId);
+            memberReadState.setBookId(bookId);
+            memberReadState.setReadState(readState);
+            memberReadState.setCreateTime(new Date());
+            memberReadStateMapper.insert(memberReadState);
+        }else{
+            memberReadState.setReadState(readState);
+            memberReadStateMapper.updateById(memberReadState);
+        }
+        return memberReadState;
+    }
+
+
 }

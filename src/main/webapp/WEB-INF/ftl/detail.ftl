@@ -49,6 +49,35 @@
         $(function () {
             $(".stars").raty({readOnly: true});
         })
+
+        $(function(){
+            <#if memberReadState ?? >
+                $("*[data-read-state='${memberReadState.readState}']").addClass("highlight");
+            </#if>
+
+            <#if !loginMember ?? >
+                $("*[data-read-state],#btnEvaluation,*[data-evaluation-id]").click(function(){
+                    $("#exampleModalCenter").modal("show");
+                });
+            </#if>
+
+            <#if loginMember ?? >
+                $("*[data-read-state]").click(function(){
+                    var readState=$(this).data("read-state");
+                    $.post("/update_read_state",{
+                        memberId:${loginMember.memberId},
+                        bookId:${book.bookId},
+                        readState:readState
+                    },function(json) {
+                        if(json.code=="0"){
+                            $("*[data-read-state]").removeClass("highlight");
+                            $("*[data-read-state='"+readState+"']").addClass("highlight");
+                        }
+                    }, "json")
+                })
+            </#if>
+
+        })
     </script>
 </head>
 <body>
@@ -85,13 +114,13 @@
                     <div class="col-6 p-1">
                         <button type="button" data-read-state="1" class="btn btn-light btn-sm w-100">
                             <img style="width: 1rem;" class="mr-1"
-                                 src="https://img3.doubanio.com/f/talion/cf2ab22e9cbc28a2c43de53e39fce7fbc93131d1/pics/card/ic_mark_todo_s.png"/>想看
+                                 src="https://img3.doubanio.com/f/talion/cf2ab22e9cbc28a2c43de53e39fce7fbc93131d1/pics/card/ic_mark_todo_s.png"/>Wait
                         </button>
                     </div>
                     <div class="col-6 p-1">
                         <button type="button" data-read-state="2" class="btn btn-light btn-sm  w-100">
                             <img style="width: 1rem;" class="mr-1"
-                                 src="https://img3.doubanio.com/f/talion/78fc5f5f93ba22451fd7ab36836006cb9cc476ea/pics/card/ic_mark_done_s.png"/>看过
+                                 src="https://img3.doubanio.com/f/talion/78fc5f5f93ba22451fd7ab36836006cb9cc476ea/pics/card/ic_mark_done_s.png"/>Read
                         </button>
                     </div>
                 </div>
@@ -112,7 +141,7 @@
     <div class="alert alert-primary w-100 mt-2" role="alert">短评
         <button type="button" id="btnEvaluation" class="btn btn-success btn-sm text-white float-right"
                 style="margin-top: -3px;">
-            写短评
+            comment
         </button>
     </div>
     <div class="reply pl-2 pr-2">
@@ -147,10 +176,10 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-body">
-                您需要登录才可以操作哦~
+                You haven't logged in yet.
             </div>
             <div class="modal-footer">
-                <a href="/login.html" type="button" class="btn btn-primary">去登录</a>
+                <a href="/login.html" type="button" class="btn btn-primary">Log In</a>
             </div>
         </div>
     </div>

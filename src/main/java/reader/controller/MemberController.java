@@ -75,4 +75,21 @@ public class MemberController {
         return result;
 
     }
+
+    @PostMapping("/update_read_state")
+    @ResponseBody
+    public Map updateReadState(Long memberId,Long bookId,Integer readState){
+        Map result=new HashMap();
+        try {
+            memberService.updateMemberReadState(memberId, bookId, readState);
+            result.put("code","0");
+            result.put("msg","success");
+        }catch (BusinessException ex) {
+            ex.printStackTrace();
+            result.put("code",ex.getCode());
+            result.put("msg",ex.getMsg());
+
+        }
+        return result;
+    }
 }
