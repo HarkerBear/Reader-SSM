@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+import reader.entity.Evaluation;
 import reader.entity.Member;
 import reader.service.MemberService;
 import reader.service.exception.BusinessException;
@@ -92,4 +93,40 @@ public class MemberController {
         }
         return result;
     }
+
+    @PostMapping("/evaluate")
+    @ResponseBody
+    public Map evaluate(Long memberId,Long bookId,Integer score,String content) {
+        Map result=new HashMap();
+        try {
+            Evaluation evaluation=memberService.evaluate(memberId,bookId,score,content);
+            result.put("code","0");
+            result.put("msg","success");
+            result.put("evaluation",evaluation);
+        }catch (BusinessException ex) {
+            ex.printStackTrace();
+            result.put("code",ex.getCode());
+            result.put("msg",ex.getMsg());
+        }
+        return result;
+    }
+
+    @PostMapping("/enjoy")
+    @ResponseBody
+    public Map enjoy(Long evaluationId) {
+        Map result=new HashMap();
+        try {
+            Evaluation evaluation=memberService.enjoy(evaluationId);
+            result.put("code","0");
+            result.put("msg","success");
+            result.put("evaluation",evaluation);
+        }catch (BusinessException ex) {
+            ex.printStackTrace();
+            result.put("code",ex.getCode());
+            result.put("msg",ex.getMsg());
+        }
+        return result;
+    }
+
+
 }

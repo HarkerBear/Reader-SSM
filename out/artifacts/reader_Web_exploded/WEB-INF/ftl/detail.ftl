@@ -75,6 +75,39 @@
                         }
                     }, "json")
                 })
+
+                $("#btnEvaluation").click(function () {
+                    $("#score").raty({});
+                    $("#dlgEvaluation").modal("show");
+                })
+
+                $("#btnSubmit").click(function () {
+                    var score=$("#score").raty("score");
+                    var content=$("#content").val();
+                    if(score==0 || $.trim(content) == "") {
+                        return;
+                    }
+                    $.post("/evaluate", {
+                        score:score,
+                        bookId: ${book.bookId},
+                        memberId: ${loginMember.memberId},
+                        content:content
+                    },function (json) {
+                        if(json.code=="0"){
+                            window.location.reload();
+                        }
+                    },"json")
+                })
+
+                $("*[data-evaluation-id]").click(function () {
+                    var evaluationId=$(this).data("evaluation-id");
+                    $.post("/enjoy",{evaluationId:evaluationId},function(json){
+                        if(json.code=="0"){
+                            // 这段代码有问题
+                            $("*[data-evaluation-id]='" + evaluationId + "'] span").text(json.evaluation.enjoy);
+                        }
+                    },"json")
+                })
             </#if>
 
         })
@@ -131,14 +164,14 @@
             <div class="col-5 pt-2">
                 <span class="stars" data-score="4.9"></span>
             </div>
-            <div class="col-5  pt-2"><h5 class="text-white">${book.evaluationQuantity} socred</h5></div>
+            <div class="col-5  pt-2"><h5 class="text-white">${book.evaluationQuantity} scored</h5></div>
         </div>
     </div>
     <div class="row p-2 description">
         ${book.description}
     </div>
 
-    <div class="alert alert-primary w-100 mt-2" role="alert">短评
+    <div class="alert alert-primary w-100 mt-2" role="alert">Comments
         <button type="button" id="btnEvaluation" class="btn btn-success btn-sm text-white float-right"
                 style="margin-top: -3px;">
             comment
@@ -191,18 +224,18 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-body">
-                <h6>为"从 0 开始学爬虫"写短评</h6>
+                <h6>comment for "${book.bookName}"</h6>
                 <form id="frmEvaluation">
                     <div class="input-group  mt-2 ">
                         <span id="score"></span>
                     </div>
                     <div class="input-group  mt-2 ">
-                        <input type="text" id="content" name="content" class="form-control p-4" placeholder="这里输入短评">
+                        <input type="text" id="content" name="content" class="form-control p-4" placeholder="comment">
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" id="btnSubmit" class="btn btn-primary">提交</button>
+                <button type="button" id="btnSubmit" class="btn btn-primary">Submit</button>
             </div>
         </div>
     </div>

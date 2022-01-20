@@ -8,4 +8,6 @@ public interface BookService {
 
     public Book selectById(Long bookId);
 
+    public void updateEvaluation();
+
 }
