@@ -136,7 +136,7 @@
         <ul class="nav">
             <li class="nav-item">
                 <a href="/">
-                    <img src="https://m.imooc.com/static/wap/static/common/img/logo2.png" class="mt-1" style="width: 100px">
+                    <img src="./images/header.png" class="mt-1" style="width: 200px">
                 </a>
             </li>
 
@@ -147,7 +147,7 @@
                 </h6>
             <#else>
                 <a href="/login.html" class="btn btn-light btn-sm">
-                    <img style="width: 2rem;margin-top: -5px" class="mr-1" src="./images/user_icon.png">登录
+                    <img style="width: 2rem;margin-top: -5px" class="mr-1" src="./images/user_icon.png">Login
                 </a>
             </#if>
     </nav>
@@ -155,7 +155,7 @@
 
 
         <div class="col-8 mt-2">
-            <h4>热评好书推荐</h4>
+            <h4>Recommandation</h4>
         </div>
 
         <div class="col-8 mt-2">
@@ -169,9 +169,9 @@
         </div>
 
         <div class="col-8 mt-2">
-            <span data-order="quantity" style="cursor: pointer" class="order highlight  font-weight-bold mr-3">按热度</span>
+            <span data-order="quantity" style="cursor: pointer" class="order highlight  font-weight-bold mr-3">By Hot</span>
 
-            <span data-order="score" style="cursor: pointer" class="order text-black-50 mr-3 font-weight-bold">按评分</span>
+            <span data-order="score" style="cursor: pointer" class="order text-black-50 mr-3 font-weight-bold">By Score</span>
         </div>
     </div>
     <div class="d-none">
